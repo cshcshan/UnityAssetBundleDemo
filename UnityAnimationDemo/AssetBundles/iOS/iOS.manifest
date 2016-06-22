@@ -1,0 +1,9 @@
+ManifestFileVersion: 0
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: animation/sphere
+      Dependencies: {}
+    Info_1:
+      Name: animation/cube
+      Dependencies: {}
