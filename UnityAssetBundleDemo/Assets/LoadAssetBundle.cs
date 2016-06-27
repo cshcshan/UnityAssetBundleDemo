@@ -23,14 +23,14 @@ public class LoadAssetBundle : MonoBehaviour {
 		GUI.Label (new Rect (10, 10, 300, 30), "Load AssetBundle");
 		assetBundleUrl = GUI.TextField (new Rect (10, 50, 300, 30), assetBundleUrl);
 		if (GUI.Button(new Rect(10, 100, 300, 80), "Cube Animation")) {
-			Debug.Log ("Url: " + assetBundleUrl);
+			Debug.Log ("[HAN] Url: " + assetBundleUrl);
 			AssetBundleManager.UnloadAssetBundle (assetBundleName);
 			assetBundleName = "animation/cube";
 			sceneName = "CubeScene";
 			StartCoroutine (StartLoadAssetBundle ());
 		}
 		if (GUI.Button(new Rect(10, 200, 300, 80), "Sphere Animation")) {
-			Debug.Log ("Url: " + assetBundleUrl);
+			Debug.Log ("[HAN] Url: " + assetBundleUrl);
 			AssetBundleManager.UnloadAssetBundle (assetBundleName);
 			assetBundleName = "animation/sphere";
 			sceneName = "SphereScene";
@@ -39,44 +39,44 @@ public class LoadAssetBundle : MonoBehaviour {
 	}
 
 	IEnumerator StartLoadAssetBundle() {
-		Debug.Log ("StartLoadAssetBundle: Before StartCoroutine (DownloadAssetBundle ())");
+		Debug.Log ("[HAN] StartLoadAssetBundle: Before StartCoroutine (DownloadAssetBundle ())");
 		yield return StartCoroutine (DownloadAssetBundle ());
 		AssetBundleManager.ActiveVariants = activeVariants;
-		Debug.Log ("StartLoadAssetBundle: Before StartCoroutine (InitializeLevelAsync (sceneName, true)");
+		Debug.Log ("[HAN] StartLoadAssetBundle: Before StartCoroutine (InitializeLevelAsync (sceneName, true)");
 		yield return StartCoroutine (InitializeLevelAsync (sceneName, true));
-		Debug.Log ("StartLoadAssetBundle: End");
+		Debug.Log ("[HAN] StartLoadAssetBundle: End");
 	}
 
 	protected IEnumerator DownloadAssetBundle() {
-		Debug.Log ("DownloadAssetBundle: Before DontDestroyOnLoad (gameObject)");
+		Debug.Log ("[HAN] DownloadAssetBundle: Before DontDestroyOnLoad (gameObject)");
 		DontDestroyOnLoad (gameObject);
-		Debug.Log ("DownloadAssetBundle: Before AssetBundleManager.SetSourceAssetBundleURL (assetBundleUrl)");
+		Debug.Log ("[HAN] DownloadAssetBundle: Before AssetBundleManager.SetSourceAssetBundleURL (assetBundleUrl)");
 		AssetBundleManager.SetSourceAssetBundleURL (assetBundleUrl);
-		Debug.Log ("DownloadAssetBundle: Before AssetBundleManager.Initialize ()");
+		Debug.Log ("[HAN] DownloadAssetBundle: Before AssetBundleManager.Initialize ()");
 		var request = AssetBundleManager.Initialize ();
 		if (request != null) {
-			Debug.Log ("DownloadAssetBundle: Before StartCoroutine (request)");
+			Debug.Log ("[HAN] DownloadAssetBundle: Before StartCoroutine (request)");
 			yield return StartCoroutine (request);
 		}
-		Debug.Log ("DownloadAssetBundle: End");
+		Debug.Log ("[HAN] DownloadAssetBundle: End");
 	}
 
 	protected IEnumerator InitializeLevelAsync(string levelName, bool isAdditive) {
-		Debug.Log ("InitializeLevelAsync: Start");
+		Debug.Log ("[HAN] InitializeLevelAsync: Start");
 		float startTime = Time.realtimeSinceStartup;
 
-		Debug.Log ("InitializeLevelAsync: Before AssetBundleManager.LoadLevelAsync (assetBundleName, levelName, isAdditive)");
+		Debug.Log ("[HAN] InitializeLevelAsync: Before AssetBundleManager.LoadLevelAsync (assetBundleName, levelName, isAdditive)");
 
 		// Load level from assetBundle.
 		AssetBundleLoadOperation request = AssetBundleManager.LoadLevelAsync (assetBundleName, levelName, isAdditive);
 		if (request == null) {
-			Debug.Log ("InitializeLevelAsync: request is null");
+			Debug.Log ("[HAN] InitializeLevelAsync: request is null");
 			yield break;
 		}
-		Debug.Log ("InitializeLevelAsync: Before StartCoroutine (request)");
+		Debug.Log ("[HAN] InitializeLevelAsync: Before StartCoroutine (request)");
 		yield return StartCoroutine (request);
 
 		float elapsedTime = Time.realtimeSinceStartup - startTime;
-		Debug.Log ("Finished loading scene " + levelName + " in " + elapsedTime + " seconds.");
+		Debug.Log ("[HAN] Finished loading scene " + levelName + " in " + elapsedTime + " seconds.");
     }
 }
