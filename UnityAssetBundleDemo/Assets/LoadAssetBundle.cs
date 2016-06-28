@@ -23,14 +23,14 @@ public class LoadAssetBundle : MonoBehaviour {
 		GUI.Label (new Rect (10, 10, 300, 30), "Load AssetBundle");
 		assetBundleUrl = GUI.TextField (new Rect (10, 50, 300, 30), assetBundleUrl);
 		if (GUI.Button(new Rect(10, 100, 300, 80), "Cube Animation")) {
-			Debug.Log ("[HAN] Url: " + assetBundleUrl);
+			Debug.Log ("[Han TEST IN UNITY] Url: " + assetBundleUrl);
 			AssetBundleManager.UnloadAssetBundle (assetBundleName);
 			assetBundleName = "animation/cube";
 			sceneName = "CubeScene";
 			StartCoroutine (StartLoadAssetBundle ());
 		}
 		if (GUI.Button(new Rect(10, 200, 300, 80), "Sphere Animation")) {
-			Debug.Log ("[HAN] Url: " + assetBundleUrl);
+			Debug.Log ("[Han TEST IN UNITY] Url: " + assetBundleUrl);
 			AssetBundleManager.UnloadAssetBundle (assetBundleName);
 			assetBundleName = "animation/sphere";
 			sceneName = "SphereScene";
@@ -39,44 +39,48 @@ public class LoadAssetBundle : MonoBehaviour {
 	}
 
 	IEnumerator StartLoadAssetBundle() {
-		Debug.Log ("[HAN] StartLoadAssetBundle: Before StartCoroutine (DownloadAssetBundle ())");
+		Debug.Log ("[Han TEST IN UNITY] StartLoadAssetBundle: Before StartCoroutine (DownloadAssetBundle ())");
 		yield return StartCoroutine (DownloadAssetBundle ());
 		AssetBundleManager.ActiveVariants = activeVariants;
-		Debug.Log ("[HAN] StartLoadAssetBundle: Before StartCoroutine (InitializeLevelAsync (sceneName, true)");
+		Debug.Log ("[Han TEST IN UNITY] StartLoadAssetBundle: Before StartCoroutine (InitializeLevelAsync (sceneName, true)");
 		yield return StartCoroutine (InitializeLevelAsync (sceneName, true));
-		Debug.Log ("[HAN] StartLoadAssetBundle: End");
+		Debug.Log ("[Han TEST IN UNITY] StartLoadAssetBundle: End");
 	}
 
 	protected IEnumerator DownloadAssetBundle() {
-		Debug.Log ("[HAN] DownloadAssetBundle: Before DontDestroyOnLoad (gameObject)");
+		Debug.Log ("[Han TEST IN UNITY] DownloadAssetBundle: Before DontDestroyOnLoad (gameObject)");
 		DontDestroyOnLoad (gameObject);
-		Debug.Log ("[HAN] DownloadAssetBundle: Before AssetBundleManager.SetSourceAssetBundleURL (assetBundleUrl)");
+		Debug.Log ("[Han TEST IN UNITY] DownloadAssetBundle: Before AssetBundleManager.SetSourceAssetBundleURL (assetBundleUrl)");
 		AssetBundleManager.SetSourceAssetBundleURL (assetBundleUrl);
-		Debug.Log ("[HAN] DownloadAssetBundle: Before AssetBundleManager.Initialize ()");
+		Debug.Log ("[Han TEST IN UNITY] DownloadAssetBundle: Before AssetBundleManager.Initialize ()");
 		var request = AssetBundleManager.Initialize ();
 		if (request != null) {
-			Debug.Log ("[HAN] DownloadAssetBundle: Before StartCoroutine (request)");
+			Debug.Log ("[Han TEST IN UNITY] DownloadAssetBundle: Before StartCoroutine (request)");
 			yield return StartCoroutine (request);
 		}
-		Debug.Log ("[HAN] DownloadAssetBundle: End");
+		Debug.Log ("[Han TEST IN UNITY] DownloadAssetBundle: End");
 	}
 
 	protected IEnumerator InitializeLevelAsync(string levelName, bool isAdditive) {
-		Debug.Log ("[HAN] InitializeLevelAsync: Start");
+		Debug.Log ("[Han TEST IN UNITY] InitializeLevelAsync: Start");
 		float startTime = Time.realtimeSinceStartup;
 
-		Debug.Log ("[HAN] InitializeLevelAsync: Before AssetBundleManager.LoadLevelAsync (assetBundleName, levelName, isAdditive)");
+		Debug.Log ("[Han TEST IN UNITY] InitializeLevelAsync: Before AssetBundleManager.LoadLevelAsync (assetBundleName, levelName, isAdditive)");
 
 		// Load level from assetBundle.
 		AssetBundleLoadOperation request = AssetBundleManager.LoadLevelAsync (assetBundleName, levelName, isAdditive);
 		if (request == null) {
-			Debug.Log ("[HAN] InitializeLevelAsync: request is null");
+			Debug.Log ("[Han TEST IN UNITY] InitializeLevelAsync: request is null");
 			yield break;
 		}
-		Debug.Log ("[HAN] InitializeLevelAsync: Before StartCoroutine (request)");
+		Debug.Log ("[Han TEST IN UNITY] InitializeLevelAsync: Before StartCoroutine (request)");
 		yield return StartCoroutine (request);
 
 		float elapsedTime = Time.realtimeSinceStartup - startTime;
-		Debug.Log ("[HAN] Finished loading scene " + levelName + " in " + elapsedTime + " seconds.");
+		Debug.Log ("[Han TEST IN UNITY] Finished loading scene " + levelName + " in " + elapsedTime + " seconds.");
     }
+
+	public void sharedFunction(string argument) {
+		Debug.Log ("[Han TEST IN UNITY] sharedFunction: " + argument);
+	}
 }
