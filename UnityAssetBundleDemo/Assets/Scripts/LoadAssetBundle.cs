@@ -3,8 +3,8 @@ using System.Collections;
 using AssetBundles;
 
 public class LoadAssetBundle : MonoBehaviour {
-//	static string assetBundleUrl = "http://172.16.129.32/UnityAnimationDemo/";
-	static string assetBundleUrl = "http://192.168.0.101/UnityAssetBundle/UnityAnimationDemo/";
+	static string assetBundleUrl = "http://172.16.129.32/UnityAssetBundle/UnityAnimationDemo/";
+//	static string assetBundleUrl = "http://192.168.0.101/UnityAssetBundle/UnityAnimationDemo/";
 	string assetBundleName = "";
 	string sceneName = "";
 	private string[] activeVariants;
@@ -19,24 +19,24 @@ public class LoadAssetBundle : MonoBehaviour {
 	
 	}
 
-	void OnGUI() {
-		GUI.Label (new Rect (10, 10, 300, 30), "Load AssetBundle");
-		assetBundleUrl = GUI.TextField (new Rect (10, 50, 300, 30), assetBundleUrl);
-		if (GUI.Button(new Rect(10, 100, 300, 80), "Cube Animation")) {
-			Debug.Log ("[Han TEST IN UNITY] Url: " + assetBundleUrl);
-			AssetBundleManager.UnloadAssetBundle (assetBundleName);
-			assetBundleName = "animation/cube";
-			sceneName = "CubeScene";
-			StartCoroutine (StartLoadAssetBundle ());
-		}
-		if (GUI.Button(new Rect(10, 200, 300, 80), "Sphere Animation")) {
-			Debug.Log ("[Han TEST IN UNITY] Url: " + assetBundleUrl);
-			AssetBundleManager.UnloadAssetBundle (assetBundleName);
-			assetBundleName = "animation/sphere";
-			sceneName = "SphereScene";
-			StartCoroutine (StartLoadAssetBundle ());
-		}
-	}
+//	void OnGUI() {
+//		GUI.Label (new Rect (10, 10, 300, 30), "Load AssetBundle");
+//		assetBundleUrl = GUI.TextField (new Rect (10, 50, 1200, 30), assetBundleUrl);
+//		if (GUI.Button(new Rect(10, 100, 300, 80), "Cube Animation")) {
+//			Debug.Log ("[Han TEST IN UNITY] Url: " + assetBundleUrl);
+//			AssetBundleManager.UnloadAssetBundle (assetBundleName);
+//			assetBundleName = "animation/cube";
+//			sceneName = "CubeScene";
+//			StartCoroutine (StartLoadAssetBundle ());
+//		}
+//		if (GUI.Button(new Rect(10, 200, 300, 80), "Sphere Animation")) {
+//			Debug.Log ("[Han TEST IN UNITY] Url: " + assetBundleUrl);
+//			AssetBundleManager.UnloadAssetBundle (assetBundleName);
+//			assetBundleName = "animation/sphere";
+//			sceneName = "SphereScene";
+//			StartCoroutine (StartLoadAssetBundle ());
+//		}
+//	}
 
 	IEnumerator StartLoadAssetBundle() {
 		Debug.Log ("[Han TEST IN UNITY] StartLoadAssetBundle: Before StartCoroutine (DownloadAssetBundle ())");
