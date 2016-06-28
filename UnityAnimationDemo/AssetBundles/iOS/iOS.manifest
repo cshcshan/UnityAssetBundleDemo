@@ -2,8 +2,12 @@ ManifestFileVersion: 0
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: animation/sphere
+      Name: sphereprefab
       Dependencies: {}
     Info_1:
-      Name: animation/cube
+      Name: cubescene
       Dependencies: {}
+    Info_2:
+      Name: animation/sphere
+      Dependencies:
+        Dependency_0: sphereprefab

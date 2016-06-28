@@ -6,25 +6,45 @@ using AssetBundles;
 public class TestLoadAsset : MonoBehaviour {
 
 	public Text myText;
-	static string assetBundleUrl = "http://172.16.129.32/UnityAssetBundle/AssetBundleTests/";
+//	static string host = "http://172.16.129.32/UnityAssetBundle/";
+//	static string host = "http://172.20.10.4/UnityAssetBundle/";
+	static string host = "http://192.168.0.100/UnityAssetBundle/";
+	string assetBundleUrl = host + "AssetBundleTests/";
 
 	private string assetBundleName = "mybundle";
 	static string LAST_HASH = "LAST_HASH";
 
 
 	void OnGUI() {
-		GUI.Label (new Rect (10, 10, 300, 30), "Load AssetBundle");
-		assetBundleUrl = GUI.TextField (new Rect (10, 50, 1200, 30), assetBundleUrl);
-		if (GUI.Button(new Rect(10, 100, 300, 80), "Load Asset Bundles")) {
-			Debug.Log ("[Han TEST IN UNITY]");
-
+		assetBundleUrl = GUI.TextField (new Rect (350, 50, 1200, 30), assetBundleUrl);
+		if (GUI.Button(new Rect(350, 100, 300, 80), "Load Assets")) {
 			StartCoroutine(xxx());
+		}
+		if (GUI.Button(new Rect(350, 200, 300, 80), "Load Animation Scene")) {
+			StartCoroutine(yyy());
+		}
+		if (GUI.Button(new Rect(350, 300, 300, 80), "Load Animation Assets")) {
+			// animation/sphereprefab
+			StartCoroutine(zzz());
 		}
 	}
 
 	IEnumerator xxx() {
+		assetBundleUrl = host + "AssetBundleTests/";
 		yield return StartCoroutine(Initialize());
 		yield return StartCoroutine(LoadMyAssets());
+	}
+
+	IEnumerator yyy() {
+		assetBundleUrl = host + "UnityAnimationDemo/";
+		yield return StartCoroutine(Initialize());
+		yield return StartCoroutine (LoadMyScene ());
+	}
+
+	IEnumerator zzz() {
+		assetBundleUrl = host + "UnityAnimationDemo/";
+		yield return StartCoroutine(Initialize());
+		yield return StartCoroutine(LoadMyAnimationAsset());
 	}
 
 
@@ -97,11 +117,10 @@ public class TestLoadAsset : MonoBehaviour {
 		if (prefab != null)
 			GameObject.Instantiate(prefab);
 
-
-		request = AssetBundleManager.LoadAssetAsync(assetBundleName, "data.bytes", typeof(TextAsset) );
-		if (request == null)
-			yield break;
-		yield return StartCoroutine(request);
+//		request = AssetBundleManager.LoadAssetAsync(assetBundleName, "data.bytes", typeof(TextAsset) );
+//		if (request == null)
+//			yield break;
+//		yield return StartCoroutine(request);
 
 		// Get the asset.
 		TextAsset txt = request.GetAsset<TextAsset> ();
@@ -113,23 +132,48 @@ public class TestLoadAsset : MonoBehaviour {
 	}
 
 
-	IEnumerator LoadAssetsFromBundle (AssetBundle bundle) {
+//	IEnumerator LoadAssetsFromBundle (AssetBundle bundle) {
+//
+//		AssetBundleRequest request = bundle.LoadAssetAsync ("logo", typeof(GameObject));
+//
+//		yield return request;
+//
+//		GameObject obj = request.asset as GameObject;
+//		GameObject clone = GameObject.Instantiate(obj);
+//
+//		request = bundle.LoadAssetAsync ("data", typeof(TextAsset));
+//		yield return request;
+//
+//		TextAsset txt = request.asset as TextAsset;
+//		if (txt != null)
+//			myText.text = txt.text;
+//		
+//
+//		bundle.Unload(false);
+//	}
 
-		AssetBundleRequest request = bundle.LoadAssetAsync ("logo", typeof(GameObject));
+	IEnumerator LoadMyScene() {
+		// Load level from assetBundle.
+		AssetBundleLoadOperation request = AssetBundleManager.LoadLevelAsync ("cubescene", "CubeScene", true);
+		if (request == null) {
+			yield break;
+		}
+		yield return StartCoroutine (request);
+	}
 
-		yield return request;
+	IEnumerator LoadMyAnimationAsset ()
+	{
+		AssetBundleLoadAssetOperation request = AssetBundleManager.LoadAssetAsync("sphereprefab", "SpherePrefab.prefab", typeof(GameObject) );
+		if (request == null)
+			yield break;
+		yield return StartCoroutine(request);
 
-		GameObject obj = request.asset as GameObject;
-		GameObject clone = GameObject.Instantiate(obj);
+		// Get the asset.
+		GameObject prefab = request.GetAsset<GameObject> ();
 
-		request = bundle.LoadAssetAsync ("data", typeof(TextAsset));
-		yield return request;
-
-		TextAsset txt = request.asset as TextAsset;
-		if (txt != null)
-			myText.text = txt.text;
+		if (prefab != null)
+			GameObject.Instantiate(prefab);
 		
-
-		bundle.Unload(false);
+		TextAsset txt = request.GetAsset<TextAsset> ();
 	}
 }
