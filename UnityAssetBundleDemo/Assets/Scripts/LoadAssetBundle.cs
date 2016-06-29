@@ -4,9 +4,12 @@ using AssetBundles;
 
 public class LoadAssetBundle : MonoBehaviour {
 	static string[] SEPERATED_STRING = { "===SKYFAMILY===" };
+	string lastSceneName = "";
+	GameObject lastAsset;
 
 	// Use this for initialization
 	void Start () {
+//		handleAssetBundleLevel ("http://172.16.129.32/UnityAssetBundle/PMC/" + SEPERATED_STRING[0] + "animation" + SEPERATED_STRING[0] + "Scene_01");
 //		handleAssetBundleAsset ("http://172.16.129.32/UnityAssetBundle/AssetBundleTests/" + SEPERATED_STRING[0] + "mybundle" + SEPERATED_STRING[0] + "logo");
 	}
 	
@@ -15,11 +18,19 @@ public class LoadAssetBundle : MonoBehaviour {
 	
 	}
 
+//	void OnGUI() {
+//		if (GUI.Button(new Rect(10, 10, 300, 30), "CLOSE")) {
+//			clearAssetBundle ();
+//		}
+//	}
+
 	public void sharedFunction(string argument) {
 		Debug.Log ("[Han TEST IN UNITY] sharedFunction: " + argument);
 	}
 
 	public void handleAssetBundleLevel(string assetBundleInfo) {
+		clearAssetBundle ();
+
 		string[] parameters = assetBundleInfo.Split (SEPERATED_STRING, System.StringSplitOptions.RemoveEmptyEntries);
 		string assetBundleUrl = "";
 		string assetBundleName = "";
@@ -47,6 +58,8 @@ public class LoadAssetBundle : MonoBehaviour {
 	}
 
 	public void handleAssetBundleAsset(string assetBundleInfo) {
+		clearAssetBundle ();
+
 		string[] parameters = assetBundleInfo.Split (SEPERATED_STRING, System.StringSplitOptions.RemoveEmptyEntries);
 		string assetBundleUrl = "";
 		string assetBundleName = "";
@@ -71,6 +84,17 @@ public class LoadAssetBundle : MonoBehaviour {
 		Debug.Log ("[Han TEST IN UNITY] HandleAssetBundleLevel - assetBundleName: " + assetBundleName);
 		Debug.Log ("[Han TEST IN UNITY] HandleAssetBundleLevel - assetName: " + assetName);
 		StartCoroutine (StartLoadAssetBundleAsset (assetBundleUrl, assetBundleName, assetName));
+	}
+
+	void clearAssetBundle() {
+		if (lastSceneName != "") {
+			Application.UnloadLevel (lastSceneName);
+			lastSceneName = "";
+		}
+		if (lastAsset != null) {
+			DestroyImmediate (lastAsset);
+			lastAsset = null;
+		}
 	}
 
 	// Start Load AssetBundle
@@ -109,6 +133,7 @@ public class LoadAssetBundle : MonoBehaviour {
 
 		float elapsedTime = Time.realtimeSinceStartup - startTime;
 		Debug.Log ("[Han TEST IN UNITY] Finished loading scene " + sceneName + " in " + elapsedTime + " seconds.");
+		lastSceneName = sceneName;
     }
 
 	protected IEnumerator LoadAsset(string assetBundleName, string assetName) {
@@ -122,7 +147,7 @@ public class LoadAssetBundle : MonoBehaviour {
 		yield return StartCoroutine (request);
 		GameObject prefab = request.GetAsset<GameObject> ();
 		if (prefab != null) {
-			GameObject.Instantiate (prefab);
+			lastAsset = GameObject.Instantiate (prefab);
 		}
 
 		float elapsedTime = Time.realtimeSinceStartup - startTime;
