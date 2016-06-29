@@ -6,9 +6,9 @@ using AssetBundles;
 public class TestLoadAsset : MonoBehaviour {
 
 	public Text myText;
-//	static string host = "http://172.16.129.32/UnityAssetBundle/";
+	static string host = "http://172.16.129.32/UnityAssetBundle/";
 //	static string host = "http://172.20.10.4/UnityAssetBundle/";
-	static string host = "http://192.168.0.100/UnityAssetBundle/";
+//	static string host = "http://192.168.0.100/UnityAssetBundle/";
 	string assetBundleUrl = host + "AssetBundleTests/";
 
 	private string assetBundleName = "mybundle";
@@ -16,14 +16,14 @@ public class TestLoadAsset : MonoBehaviour {
 
 
 	void OnGUI() {
-		assetBundleUrl = GUI.TextField (new Rect (350, 50, 1200, 30), assetBundleUrl);
-		if (GUI.Button(new Rect(350, 100, 300, 80), "Load Assets")) {
+		assetBundleUrl = GUI.TextField (new Rect (550, 50, 500, 30), assetBundleUrl);
+		if (GUI.Button(new Rect(550, 100, 500, 80), "Load Assets")) {
 			StartCoroutine(xxx());
 		}
-		if (GUI.Button(new Rect(350, 200, 300, 80), "Load Animation Scene")) {
+		if (GUI.Button(new Rect(550, 200, 500, 80), "Load Animation Scene")) {
 			StartCoroutine(yyy());
 		}
-		if (GUI.Button(new Rect(350, 300, 300, 80), "Load Animation Assets")) {
+		if (GUI.Button(new Rect(550, 300, 500, 80), "Load Animation Assets")) {
 			// animation/sphereprefab
 			StartCoroutine(zzz());
 		}
@@ -117,18 +117,20 @@ public class TestLoadAsset : MonoBehaviour {
 		if (prefab != null)
 			GameObject.Instantiate(prefab);
 
-//		request = AssetBundleManager.LoadAssetAsync(assetBundleName, "data.bytes", typeof(TextAsset) );
-//		if (request == null)
-//			yield break;
-//		yield return StartCoroutine(request);
+		/*
+		request = AssetBundleManager.LoadAssetAsync(assetBundleName, "data.bytes", typeof(TextAsset) );
+		if (request == null)
+			yield break;
+		yield return StartCoroutine(request);
 
 		// Get the asset.
 		TextAsset txt = request.GetAsset<TextAsset> ();
 
-//		if (txt != null)
-//			myText.text = txt.text;
+		if (txt != null)
+			myText.text = txt.text;
 
-//		PlayerPrefs.SetString (LAST_HASH, AssetBundleManager.AssetBundleManifestObject.GetAssetBundleHash (assetBundleName).ToString());
+		PlayerPrefs.SetString (LAST_HASH, AssetBundleManager.AssetBundleManifestObject.GetAssetBundleHash (assetBundleName).ToString());
+		*/
 	}
 
 

@@ -3,16 +3,11 @@ using System.Collections;
 using AssetBundles;
 
 public class LoadAssetBundle : MonoBehaviour {
-//	static string assetBundleUrl = "http://172.16.129.32/UnityAssetBundle/UnityAnimationDemo/";
-	static string assetBundleUrl = "http://192.168.0.100/UnityAssetBundle/UnityAnimationDemo/";
-	string assetBundleName = "";
-	string sceneName = "";
-	string assetName = "";
-//	private string[] activeVariants;
+	static string[] SEPERATED_STRING = { "===SKYFAMILY===" };
 
 	// Use this for initialization
 	void Start () {
-	
+//		handleAssetBundleAsset ("http://172.16.129.32/UnityAssetBundle/AssetBundleTests/" + SEPERATED_STRING[0] + "mybundle" + SEPERATED_STRING[0] + "logo");
 	}
 	
 	// Update is called once per frame
@@ -20,42 +15,77 @@ public class LoadAssetBundle : MonoBehaviour {
 	
 	}
 
-	void OnGUI() {
-		GUI.Label (new Rect (10, 10, 300, 30), "Load AssetBundle");
-		assetBundleUrl = GUI.TextField (new Rect (10, 50, 1200, 30), assetBundleUrl);
-		if (GUI.Button(new Rect(10, 100, 300, 80), "Cube Animation From Scene")) {
-			AssetBundleManager.UnloadAssetBundle (assetBundleName);
-			assetBundleName = "cubescene";
-			sceneName = "CubeScene";
-			StartCoroutine (StartLoadAssetBundleScene ());
-		}
-		if (GUI.Button(new Rect(10, 200, 300, 80), "Sphere Animation From Scene")) {
-			AssetBundleManager.UnloadAssetBundle (assetBundleName);
-			assetBundleName = "animation/sphere";
-			sceneName = "SphereScene";
-			StartCoroutine (StartLoadAssetBundleScene ());
-		}
-		if (GUI.Button(new Rect(10, 300, 300, 80), "Sphere Animation From Prefab")) {
-			AssetBundleManager.UnloadAssetBundle (assetBundleName);
-			assetBundleName = "sphereprefab";
-			assetName = "SpherePrefab.prefab";
-			StartCoroutine (StartLoadAssetBundleAsset ());
-		}
+	public void sharedFunction(string argument) {
+		Debug.Log ("[Han TEST IN UNITY] sharedFunction: " + argument);
 	}
 
-	IEnumerator StartLoadAssetBundleScene() {
-		yield return StartCoroutine (DownloadAssetBundle ());
-//		AssetBundleManager.ActiveVariants = activeVariants;
-		yield return StartCoroutine (InitializeLevelAsync (true));
+	public void handleAssetBundleLevel(string assetBundleInfo) {
+		string[] parameters = assetBundleInfo.Split (SEPERATED_STRING, System.StringSplitOptions.RemoveEmptyEntries);
+		string assetBundleUrl = "";
+		string assetBundleName = "";
+		string sceneName = "";
+		for (int i = 0; i < parameters.Length; i++) {
+			switch (i) {
+			case 0:
+				assetBundleUrl = parameters [i];
+				break;
+			case 1:
+				assetBundleName = parameters [i];
+				break;
+			case 2:
+				sceneName = parameters [i];
+				break;
+			default:
+				break;
+			}
+		}
+		Debug.Log ("[Han TEST IN UNITY] HandleAssetBundleLevel - assetBundleInfo: " + assetBundleInfo);
+		Debug.Log ("[Han TEST IN UNITY] HandleAssetBundleLevel - assetBundleUrl: " + assetBundleUrl);
+		Debug.Log ("[Han TEST IN UNITY] HandleAssetBundleLevel - assetBundleName: " + assetBundleName);
+		Debug.Log ("[Han TEST IN UNITY] HandleAssetBundleLevel - sceneName: " + sceneName);
+		StartCoroutine (StartLoadAssetBundleScene (assetBundleUrl, assetBundleName, sceneName, true));
 	}
 
-	IEnumerator StartLoadAssetBundleAsset() {
-		yield return StartCoroutine (DownloadAssetBundle ());
-//		AssetBundleManager.ActiveVariants = activeVariants;
-		yield return StartCoroutine (InitializeAssetAsync ());
+	public void handleAssetBundleAsset(string assetBundleInfo) {
+		string[] parameters = assetBundleInfo.Split (SEPERATED_STRING, System.StringSplitOptions.RemoveEmptyEntries);
+		string assetBundleUrl = "";
+		string assetBundleName = "";
+		string assetName = "";
+		for (int i = 0; i < parameters.Length; i++) {
+			switch (i) {
+			case 0:
+				assetBundleUrl = parameters [i];
+				break;
+			case 1:
+				assetBundleName = parameters [i];
+				break;
+			case 2:
+				assetName = parameters [i];
+				break;
+			default:
+				break;
+			}
+		}
+		Debug.Log ("[Han TEST IN UNITY] HandleAssetBundleLevel - assetBundleInfo: " + assetBundleInfo);
+		Debug.Log ("[Han TEST IN UNITY] HandleAssetBundleLevel - assetBundleUrl: " + assetBundleUrl);
+		Debug.Log ("[Han TEST IN UNITY] HandleAssetBundleLevel - assetBundleName: " + assetBundleName);
+		Debug.Log ("[Han TEST IN UNITY] HandleAssetBundleLevel - assetName: " + assetName);
+		StartCoroutine (StartLoadAssetBundleAsset (assetBundleUrl, assetBundleName, assetName));
 	}
 
-	protected IEnumerator DownloadAssetBundle() {
+	// Start Load AssetBundle
+	protected IEnumerator StartLoadAssetBundleScene(string assetBundleUrl, string assetBundleName, string sceneName, bool isAdditive) {
+		yield return StartCoroutine (InitializeAssetBundle (assetBundleUrl));
+		yield return StartCoroutine (LoadScene (assetBundleName, sceneName, true));
+	}
+
+	protected IEnumerator StartLoadAssetBundleAsset(string assetBundleUrl, string assetBundleName, string assetName) {
+		yield return StartCoroutine (InitializeAssetBundle (assetBundleUrl));
+		yield return StartCoroutine (LoadAsset (assetBundleName, assetName));
+	}
+
+	// Initialize AssetBundle
+	protected IEnumerator InitializeAssetBundle(string assetBundleUrl) {
 		DontDestroyOnLoad (gameObject);
 //		AssetBundleManager.SetSourceAssetBundleURL("file://" + Application.streamingAssetsPath + "/");
 //		AssetBundleManager.SetSourceAssetBundleURL( Application.streamingAssetsPath + "/");
@@ -66,7 +96,8 @@ public class LoadAssetBundle : MonoBehaviour {
 		}
 	}
 
-	protected IEnumerator InitializeLevelAsync(bool isAdditive) {
+	// Initialize AssetBundle
+	protected IEnumerator LoadScene(string assetBundleName, string sceneName, bool isAdditive) {
 		float startTime = Time.realtimeSinceStartup;
 
 		// Load level from assetBundle.
@@ -77,9 +108,10 @@ public class LoadAssetBundle : MonoBehaviour {
 		yield return StartCoroutine (request);
 
 		float elapsedTime = Time.realtimeSinceStartup - startTime;
+		Debug.Log ("[Han TEST IN UNITY] Finished loading scene " + sceneName + " in " + elapsedTime + " seconds.");
     }
 
-	protected IEnumerator InitializeAssetAsync() {
+	protected IEnumerator LoadAsset(string assetBundleName, string assetName) {
 		float startTime = Time.realtimeSinceStartup;
 
 		// Load level from assetBundle.
@@ -94,9 +126,6 @@ public class LoadAssetBundle : MonoBehaviour {
 		}
 
 		float elapsedTime = Time.realtimeSinceStartup - startTime;
-	}
-
-	public void sharedFunction(string argument) {
-		Debug.Log ("[Han TEST IN UNITY] sharedFunction: " + argument);
+		Debug.Log ("[Han TEST IN UNITY] Finished loading asset " + assetName + " in " + elapsedTime + " seconds.");
 	}
 }
