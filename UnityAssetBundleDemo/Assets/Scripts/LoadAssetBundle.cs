@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using AssetBundles;
 
@@ -88,7 +89,8 @@ public class LoadAssetBundle : MonoBehaviour {
 
 	void clearAssetBundle() {
 		if (lastSceneName != "") {
-			Application.UnloadLevel (lastSceneName);
+//			Application.UnloadLevel (lastSceneName);
+			SceneManager.UnloadScene (lastSceneName);
 			lastSceneName = "";
 		}
 		if (lastAsset != null) {

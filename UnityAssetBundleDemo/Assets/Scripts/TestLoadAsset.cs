@@ -12,7 +12,7 @@ public class TestLoadAsset : MonoBehaviour {
 	string assetBundleUrl = host + "AssetBundleTests/";
 
 	private string assetBundleName = "mybundle";
-	static string LAST_HASH = "LAST_HASH";
+//	static string LAST_HASH = "LAST_HASH";
 
 
 	void OnGUI() {
@@ -176,6 +176,6 @@ public class TestLoadAsset : MonoBehaviour {
 		if (prefab != null)
 			GameObject.Instantiate(prefab);
 		
-		TextAsset txt = request.GetAsset<TextAsset> ();
+//		TextAsset txt = request.GetAsset<TextAsset> ();
 	}
 }
