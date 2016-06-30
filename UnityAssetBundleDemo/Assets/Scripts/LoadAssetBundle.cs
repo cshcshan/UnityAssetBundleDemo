@@ -19,11 +19,17 @@ public class LoadAssetBundle : MonoBehaviour {
 	
 	}
 
-//	void OnGUI() {
+	void OnGUI() {
 //		if (GUI.Button(new Rect(10, 10, 300, 30), "CLOSE")) {
 //			clearAssetBundle ();
 //		}
-//	}
+		if (GUI.Button(new Rect(10, 10, 300, 30), "Switch Millstar Animation")) {
+			loadPrefab ("Millstar_Animation_A09_Scene_01");
+		}
+		if (GUI.Button(new Rect(10, 50, 300, 30), "Switch Cylinder Animation")) {
+			loadPrefab ("CylinderAnimation");
+		}
+	}
 
 	public void sharedFunction(string argument) {
 		Debug.Log ("[Han TEST IN UNITY] sharedFunction: " + argument);
@@ -85,6 +91,13 @@ public class LoadAssetBundle : MonoBehaviour {
 		Debug.Log ("[Han TEST IN UNITY] HandleAssetBundleLevel - assetBundleName: " + assetBundleName);
 		Debug.Log ("[Han TEST IN UNITY] HandleAssetBundleLevel - assetName: " + assetName);
 		StartCoroutine (StartLoadAssetBundleAsset (assetBundleUrl, assetBundleName, assetName));
+	}
+
+	public void loadPrefab(string prefabName) {
+		Object prefab = Resources.Load (prefabName);
+		if (prefab != null) {
+			lastAsset = GameObject.Instantiate (prefab) as GameObject;
+		}
 	}
 
 	void clearAssetBundle() {
